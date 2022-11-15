@@ -1,3 +1,4 @@
 keyboard
 discord_webhook
 pyinstaller
+setuptools>=65.5.1 # not directly required, pinned by Snyk to avoid a vulnerability
